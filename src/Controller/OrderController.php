@@ -9,6 +9,8 @@ use App\Mailer\Mailer;
 use App\Model\Order;
 use App\Texter\Sms;
 use App\Texter\SmsTexter;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class OrderController
 {
@@ -17,13 +19,15 @@ class OrderController
     protected $mailer;
     protected $texter;
     protected $logger;
+    protected $dispatcher;
 
-    public function __construct(Database $database, Mailer $mailer, SmsTexter $texter, Logger $logger)
+    public function __construct(Database $database, Mailer $mailer, SmsTexter $texter, Logger $logger, EventDispatcher $dispatcher)
     {
         $this->database = $database;
         $this->mailer = $mailer;
         $this->texter = $texter;
         $this->logger = $logger;
+        $this->dispatcher = $dispatcher;
     }
 
     public function displayOrderForm()
@@ -54,6 +58,7 @@ class OrderController
         // voir src/Logger.php
         $this->logger->log("Commande en cours pour {$order->getQuantity()} {$order->getProduct()}");
 
+        $this->dispatcher->dispatch(new GenericEvent(["order" => $order]), "order.before_insert");
         // Enregistrement en base de données :
         // voir src/Database.php
         $this->database->insertOrder($order);

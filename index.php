@@ -5,6 +5,7 @@ use App\Database;
 use App\Logger;
 use App\Mailer\Mailer;
 use App\Texter\SmsTexter;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -13,7 +14,9 @@ $mailer = new Mailer();
 $smsTexter = new SmsTexter();
 $logger = new Logger();
 
-$controller = new OrderController($database, $mailer, $smsTexter, $logger);
+$dispatcher = new EventDispatcher();
+
+$controller = new OrderController($database, $mailer, $smsTexter, $logger, $dispatcher);
 
 if (!empty($_POST)) {
     $controller->handleOrder();
