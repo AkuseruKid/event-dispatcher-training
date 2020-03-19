@@ -31,16 +31,6 @@ class OrderController
         require __DIR__ . '/../../views/form.html.php';
     }
 
-    /**
-     * GERER LE FORMULAIRE DE COMMANDE
-     * ----------
-     * Une fois que le formulaire est soumis, on veut :
-     * 1) Extraire les données de la requête (communément admis comme étant le boulot d'un controller)
-     * 2) Demander à un service d'enregistrer la commande (aussi admis comme étant le boulot classique d'un controller)
-     * 3) Envoyer des emails (Heu ?)
-     * 4) Envoyer des SMS (Ha ?)
-     * 5) Faire des logs (Hu ?)
-     */
     public function handleOrder()
     {
         // Extraction des données du POST et création d'un objet Order (voir src/Model/Order.php)
@@ -57,6 +47,8 @@ class OrderController
             ->setBody("Merci de vérifier le stock pour le produit {$order->getProduct()} et la quantité {$order->getQuantity()} !")
             ->setTo("stock@maboutique.com")
             ->setFrom("web@maboutique.com");
+
+        $this->mailer->send($email);
 
         // Avant d'enregistrer, on veut logger ce qui se passe :
         // voir src/Logger.php
