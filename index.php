@@ -13,8 +13,11 @@ $database = new Database();
 $mailer = new Mailer();
 $smsTexter = new SmsTexter();
 $logger = new Logger();
-
 $dispatcher = new EventDispatcher();
+
+$dispatcher->addListener("order.before_insert", function (){
+    var_dump("EVENT BEFORE INSERT ORDER");
+});
 
 $controller = new OrderController($database, $mailer, $smsTexter, $logger, $dispatcher);
 
