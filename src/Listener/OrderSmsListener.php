@@ -21,6 +21,7 @@ class OrderSmsListener
     public function sendToCustomer(OrderEvent $event)
     {
         $order = $event->getOrder();
+
         // Après enregistrement on veut aussi envoyer un SMS au client
         // voir src/Texter/Sms.php et /src/Texter/SmsTexter.php
         $sms = new Sms();

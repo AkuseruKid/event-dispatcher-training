@@ -33,6 +33,7 @@ class OrderEmailSubscriber implements EventSubscriberInterface
     public function sendToStock(OrderEvent $event)
     {
         $order = $event->getOrder();
+
         // Avant d'enregistrer, on veut envoyer un email à l'administrateur :
         // voir src/Mailer/Email.php et src/Mailer/Mailer.php
         $email = new Email();
@@ -50,6 +51,7 @@ class OrderEmailSubscriber implements EventSubscriberInterface
 
     public function sendToCustomer(OrderEvent $event)
     {
+        //$event->stopPropagation();
         $order = $event->getOrder();
         // Après enregistrement, on veut envoyer un email au client :
         // voir src/Mailer/Email.php et src/Mailer/Mailer.php
