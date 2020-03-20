@@ -4,12 +4,7 @@ namespace App\Controller;
 
 use App\Database;
 use App\Event\OrderEvent;
-use App\Logger;
-use App\Mailer\Email;
-use App\Mailer\Mailer;
 use App\Model\Order;
-use App\Texter\Sms;
-use App\Texter\SmsTexter;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class OrderController

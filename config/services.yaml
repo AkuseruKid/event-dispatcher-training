@@ -1,0 +1,19 @@
+services:
+  App\:
+    resource: '../src/*'
+    autowire: true
+
+  App\Controller\OrderController:
+    public: true
+    autowire: true
+
+  Symfony\Component\EventDispatcher\EventDispatcher:
+    public: true
+
+  App\Listener\OrderEmailSubscriber:
+    public: true
+    autowire: true
+
+  App\Listener\OrderSmsListener:
+    public: true
+    autowire: true
