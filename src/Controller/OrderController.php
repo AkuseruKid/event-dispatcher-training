@@ -16,17 +16,11 @@ class OrderController
 {
 
     protected $database;
-    protected $mailer;
-    protected $texter;
-    protected $logger;
     protected $dispatcher;
 
-    public function __construct(Database $database, Mailer $mailer, SmsTexter $texter, Logger $logger, EventDispatcher $dispatcher)
+    public function __construct(Database $database, EventDispatcher $dispatcher)
     {
         $this->database = $database;
-        $this->mailer = $mailer;
-        $this->texter = $texter;
-        $this->logger = $logger;
         $this->dispatcher = $dispatcher;
     }
 
