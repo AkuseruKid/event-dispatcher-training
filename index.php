@@ -21,8 +21,8 @@ $orderEmailListener = new OrderEmailListener($mailer, $logger);
 $orderSmsListener = new OrderSmsListener($smsTexter, $logger);
 
 $dispatcher->addListener("order.before_insert", [$orderEmailListener, "sendToStock"]);
-$dispatcher->addListener("order.after_insert", [$orderEmailListener, "sendToCustomer"]);
-$dispatcher->addListener("order.after_insert", [$orderSmsListener, "sendToCustomer"]);
+$dispatcher->addListener("order.after_insert", [$orderEmailListener, "sendToCustomer"], 10);
+$dispatcher->addListener("order.after_insert", [$orderSmsListener, "sendToCustomer"], 20);
 
 $controller = new OrderController($database, $mailer, $smsTexter, $logger, $dispatcher);
 
