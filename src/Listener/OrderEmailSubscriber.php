@@ -6,8 +6,9 @@ use App\Event\OrderEvent;
 use App\Logger;
 use App\Mailer\Email;
 use App\Mailer\Mailer;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class OrderEmailListener
+class OrderEmailSubscriber implements EventSubscriberInterface
 {
     protected $mailer;
     protected $logger;
@@ -16,6 +17,17 @@ class OrderEmailListener
     {
         $this->mailer = $mailer;
         $this->logger = $logger;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        /*['eventName' => 'methodName']
+        ['eventName' => ['methodName', $priority]]
+        ['eventName' => [['methodName1', $priority], ['methodName2']]]*/
+        return [
+            "order.before_insert" => ["sendToStock"],
+            "order.after_insert" => ["sendToCustomer", 50]
+        ];
     }
 
     public function sendToStock(OrderEvent $event)
