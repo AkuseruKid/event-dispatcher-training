@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Database;
+use App\Event\OrderEvent;
 use App\Logger;
 use App\Mailer\Email;
 use App\Mailer\Mailer;
@@ -10,7 +11,6 @@ use App\Model\Order;
 use App\Texter\Sms;
 use App\Texter\SmsTexter;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class OrderController
 {
@@ -44,7 +44,7 @@ class OrderController
             ->setEmail($_POST['email'])
             ->setPhoneNumber($_POST['phone']);
 
-        $this->dispatcher->dispatch(new GenericEvent($order), "order.before_insert");
+        $this->dispatcher->dispatch(new OrderEvent($order), "order.before_insert");
 
         // Enregistrement en base de données :
         // voir src/Database.php

@@ -2,11 +2,10 @@
 
 namespace App\Listener;
 
+use App\Event\OrderEvent;
 use App\Logger;
 use App\Mailer\Email;
 use App\Mailer\Mailer;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Symfony\Contracts\EventDispatcher\Event;
 
 class OrderEmailListener
 {
@@ -19,9 +18,9 @@ class OrderEmailListener
         $this->logger = $logger;
     }
 
-    public function sendToStock(GenericEvent $event)
+    public function sendToStock(OrderEvent $event)
     {
-        $order = $event->getSubject();
+        $order = $event->getOrder();
         // Avant d'enregistrer, on veut envoyer un email à l'administrateur :
         // voir src/Mailer/Email.php et src/Mailer/Mailer.php
         $email = new Email();
