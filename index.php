@@ -2,6 +2,7 @@
 
 use App\Controller\OrderController;
 use App\Database;
+use App\Listener\OrderEmailListener;
 use App\Logger;
 use App\Mailer\Mailer;
 use App\Texter\SmsTexter;
@@ -15,9 +16,9 @@ $smsTexter = new SmsTexter();
 $logger = new Logger();
 $dispatcher = new EventDispatcher();
 
-$dispatcher->addListener("order.before_insert", function (){
-    var_dump("EVENT BEFORE INSERT ORDER");
-});
+$orderEmailListener = new OrderEmailListener($mailer, $logger);
+
+$dispatcher->addListener("order.before_insert", [$orderEmailListener, "sendToStock"]);
 
 $controller = new OrderController($database, $mailer, $smsTexter, $logger, $dispatcher);
 

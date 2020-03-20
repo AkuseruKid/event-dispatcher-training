@@ -44,21 +44,8 @@ class OrderController
             ->setEmail($_POST['email'])
             ->setPhoneNumber($_POST['phone']);
 
-        // Avant d'enregistrer, on veut envoyer un email à l'administrateur :
-        // voir src/Mailer/Email.php et src/Mailer/Mailer.php
-        $email = new Email();
-        $email->setSubject("Commande en cours")
-            ->setBody("Merci de vérifier le stock pour le produit {$order->getProduct()} et la quantité {$order->getQuantity()} !")
-            ->setTo("stock@maboutique.com")
-            ->setFrom("web@maboutique.com");
+        $this->dispatcher->dispatch(new GenericEvent($order), "order.before_insert");
 
-        $this->mailer->send($email);
-
-        // Avant d'enregistrer, on veut logger ce qui se passe :
-        // voir src/Logger.php
-        $this->logger->log("Commande en cours pour {$order->getQuantity()} {$order->getProduct()}");
-
-        $this->dispatcher->dispatch(new GenericEvent(["order" => $order]), "order.before_insert");
         // Enregistrement en base de données :
         // voir src/Database.php
         $this->database->insertOrder($order);
