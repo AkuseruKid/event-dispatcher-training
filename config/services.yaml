@@ -1,28 +1,25 @@
 services:
+  _defaults:
+    autowire: true
+
   App\:
     resource: '../src/*'
-    autowire: true
 
   App\Controller\OrderController:
     public: true
-    autowire: true
 
-  App\Listener\OrderEmailSubscriber:
-    public: true
-    autowire: true
+  App\Listeners\OrderSmsListener:
+    tags:
+      [
+        {
+          name: 'app.event_listener',
+          event: order_after_insert,
+          method: sendToCustomer,
+          priority: 3,
+        },
+      ]
 
-  App\Listener\OrderSmsListener:
-    public: true
-    autowire: true
+  App\Listeners\OrderEmailSubscriber:
+    tags: ['app.event_subscriber']
 
-  Symfony\Component\EventDispatcher\EventDispatcher:
-    public: true
-    calls:
-      - method: 'addListener'
-        arguments:
-          - 'order.after_insert'
-          - ['@App\Listener\OrderSmsListener', 'sendToCustomer']
-          - 3
-      - method: 'addSubscriber'
-        arguments:
-          - '@App\Listener\OrderEmailSubscriber'
+  Symfony\Component\EventDispatcher\EventDispatcher: ~
