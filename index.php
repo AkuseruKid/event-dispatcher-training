@@ -17,20 +17,6 @@ $loader->load("services.yaml");
 
 $container->compile();
 
-/*$database = new Database();
-$mailer = new Mailer();
-$smsTexter = new SmsTexter();
-$logger = new Logger();
-$dispatcher = new EventDispatcher();*/
-
-$orderEmailSubscriber = $container->get(OrderEmailSubscriber::class);
-$orderSmsListener = $container->get(OrderSmsListener::class);
-
-$dispatcher = $container->get(EventDispatcher::class);
-
-$dispatcher->addListener("order.after_insert", [$orderSmsListener, "sendToCustomer"], 20);
-$dispatcher->addSubscriber($orderEmailSubscriber);
-
 $controller = $container->get(OrderController::class);
 
 if (!empty($_POST)) {

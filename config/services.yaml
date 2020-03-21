@@ -7,9 +7,6 @@ services:
     public: true
     autowire: true
 
-  Symfony\Component\EventDispatcher\EventDispatcher:
-    public: true
-
   App\Listener\OrderEmailSubscriber:
     public: true
     autowire: true
@@ -17,3 +14,15 @@ services:
   App\Listener\OrderSmsListener:
     public: true
     autowire: true
+
+  Symfony\Component\EventDispatcher\EventDispatcher:
+    public: true
+    calls:
+      - method: 'addListener'
+        arguments:
+          - 'order.after_insert'
+          - ['@App\Listener\OrderSmsListener', 'sendToCustomer']
+          - 3
+      - method: 'addSubscriber'
+        arguments:
+          - '@App\Listener\OrderEmailSubscriber'
